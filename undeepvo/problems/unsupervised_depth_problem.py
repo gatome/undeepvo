@@ -8,11 +8,11 @@ import torch
 from undeepvo.utils import Problem
 from undeepvo.utils.result_data_point import ResultDataPoint
 
-
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 class UnsupervisedDepthProblem(Problem):
 
     def __init__(self, model: torch.nn.Module, criterion, optimizer_manager, dataset_manager, training_process_handler,
-                 device="cuda:0", name="", batch_size=128, use_truth_poses=False):
+                 device=device, name="", batch_size=128, use_truth_poses=False):
         super().__init__(model, criterion, optimizer_manager, dataset_manager, training_process_handler, device, name,
                          batch_size)
         self._use_truth_poses = use_truth_poses

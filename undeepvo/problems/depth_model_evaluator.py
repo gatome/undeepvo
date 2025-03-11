@@ -3,7 +3,7 @@ import numpy as np
 from undeepvo.data.supervised import GroundTruthDataset
 from undeepvo.problems import SupervisedDatasetManager
 
-
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 class DepthModelEvaluator:
     def __init__(self, model, batch_size=8, length=1000, lengths=(1, 1, 998)):
         self._model = model
@@ -27,7 +27,7 @@ class DepthModelEvaluator:
 
     def get_depth_from_image(self, img):
         with torch.no_grad():
-            return self._model.depth(img[None].to("cuda:0"))
+            return self._model.depth(img[None].to(device))
 
     @staticmethod
     def convert_to_numpy(pred, true):

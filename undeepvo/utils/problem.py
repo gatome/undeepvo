@@ -1,11 +1,11 @@
 import torch
 import abc
 
-
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 # noinspection PyUnusedLocal
 class Problem(abc.ABC):
     def __init__(self, model: torch.nn.Module, criterion, optimizer_manager, dataset_manager, training_process_handler,
-                 device="cuda:0", name="", batch_size=128):
+                 device=device, name="", batch_size=128):
         self._model = model
         self._criterion = criterion
         self._optimizer = optimizer_manager.setup_optimizer(self._model.parameters())

@@ -1,8 +1,8 @@
 import torch
 
-
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 class CamerasCalibration(object):
-    def __init__(self, camera_baseline, left_camera_matrix, right_camera_matrix, device="cuda:0"):
+    def __init__(self, camera_baseline, left_camera_matrix, right_camera_matrix, device=device):
         self.camera_baseline = camera_baseline
         self.left_camera_matrix = torch.from_numpy(left_camera_matrix).to(device)[None].float()
         self.right_camera_matrix = torch.from_numpy(right_camera_matrix).to(device)[None].float()

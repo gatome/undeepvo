@@ -9,25 +9,26 @@ from undeepvo.problems import DepthModelEvaluator
 from undeepvo.data.supervised import DataTransformManager
 from undeepvo.problems import VideoVisualizer
 
-
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 class TestEvalModel(unittest.TestCase):
-    # def test_model_loading(self):
-    #     path = "checkpoint.pth"
-    #     model = UnDeepVO(resnet=True).to("cuda:0")
-    #     checkpoint = torch.load(path, map_location='cpu')
-    #     model.load_state_dict(checkpoint)
-    #
-    # def test_model_evaluator(self):
-    #     path = "checkpoint.pth"
-    #     model = UnDeepVO(resnet=True).to("cuda:0")
-    #     checkpoint = torch.load(path, map_location='cpu')
-    #     model.load_state_dict(checkpoint)
-    #     evaluator = DepthModelEvaluator(model)
-    #     print(evaluator.calculate_metrics())
+    
+    def test_model_loading(self):
+        path = "checkpoint.pth"
+        model = UnDeepVO(resnet=True).to(device)
+        checkpoint = torch.load(path, map_location='cpu')
+        model.load_state_dict(checkpoint)
+    
+    def test_model_evaluator(self):
+        path = "checkpoint.pth"
+        model = UnDeepVO(resnet=True).to(device)
+        checkpoint = torch.load(path, map_location='cpu')
+        model.load_state_dict(checkpoint)
+        evaluator = DepthModelEvaluator(model)
+        print(evaluator.calculate_metrics())
 
     def test_model_video(self):
         path = "checkpoint.pth"
-        model = UnDeepVO(resnet=True).to("cuda:0")
+        model = UnDeepVO(resnet=True).to(device)
         checkpoint = torch.load(path, map_location='cpu')
         model.load_state_dict(checkpoint)
 

@@ -16,6 +16,8 @@ from undeepvo.problems import UnsupervisedDatasetManager, UnsupervisedDepthProbl
     SupervisedDepthProblem
 from undeepvo.utils import OptimizerManager, TrainingProcessHandler
 
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+
 parser = argparse.ArgumentParser(description='Run parameters')
 parser.add_argument('-method',
                     default='unsupervised',
@@ -127,9 +129,9 @@ parser.add_argument('-resnet',
                     help='whether to use resnet or not')
 
 parser.add_argument('-device',
-                    default="cuda:0",
+                    default="cuda" if torch.cuda.is_available() else "cpu",
                     type=str,
-                    help='whether to use resnet or not')
+                    help='whether to run on cpu or gpu')
 
 parser.add_argument('-model_path',
                     default="",
@@ -182,7 +184,7 @@ elif args.method == "supervised":
     dataset = GroundTruthDataset(length=lengths)
     dataset_manager = SupervisedDatasetManager(dataset, lengths=lengths)
 
-    model = DepthNet(args.max_depth).cuda()
+    model = DepthNet(args.max_depth).to(device)
 
     criterion = SupervisedCriterion(args.supervised_lambda)
 

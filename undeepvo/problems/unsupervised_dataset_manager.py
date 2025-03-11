@@ -7,7 +7,7 @@ from undeepvo.data.datatransform_manager import DataTransformManager
 from undeepvo.data.stereo_dataset import StereoDataset
 from undeepvo.utils import DatasetManager
 
-
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 class UnsupervisedDatasetManager(DatasetManager):
     def __init__(self, kitti_dataset, num_workers=4, lengths=(80, 10, 10), final_img_size=(128, 384),
                  transform_params={"filters": True, "normalize": False}):
@@ -38,7 +38,7 @@ class UnsupervisedDatasetManager(DatasetManager):
         return self._validation_dataset
 
     @staticmethod
-    def get_cameras_calibration(device="cuda:0"):
+    def get_cameras_calibration(device=device):
         scale = 3.
         height = 128
         width = 384
@@ -61,14 +61,14 @@ class UnsupervisedDatasetManager(DatasetManager):
         camera_baseline = 0.54
         return CamerasCalibration(camera_baseline, left_camera_matrix, right_camera_matrix, device)
 
-    def get_camera0_from_left_transformation(self, device="cuda:0"):
+    def get_camera0_from_left_transformation(self, device=device):
         camera0_from_camera2_transformation = self._kitti_dataset.calib.T_cam0_velo.dot(
             np.linalg.inv(self._kitti_dataset.calib.T_cam2_velo))
         camera0_from_camera2_transformation = torch.from_numpy(camera0_from_camera2_transformation).to(device)[
             None].float()
         return camera0_from_camera2_transformation
 
-    def get_camera0_from_right_transformation(self, device="cuda:0"):
+    def get_camera0_from_right_transformation(self, device=device):
         camera0_from_camera3_transformation = self._kitti_dataset.calib.T_cam0_velo.dot(
             np.linalg.inv(self._kitti_dataset.calib.T_cam3_velo))
         camera0_from_camera3_transformation = torch.from_numpy(camera0_from_camera3_transformation).to(device)[

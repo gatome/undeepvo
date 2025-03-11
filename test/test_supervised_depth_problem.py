@@ -1,5 +1,6 @@
 import sys
 import unittest
+import torch 
 
 from undeepvo.data import Downloader
 from undeepvo.models import DepthNet
@@ -14,7 +15,7 @@ if sys.platform == "win32":
 else:
     WORKERS_COUNT = 4
 
-
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 class DataLoaderMock(object):
     def __init__(self, data_loader):
         self._data_loader = data_loader
@@ -46,7 +47,7 @@ class TestSupervisedDepthProblem(unittest.TestCase):
         print (dataset._names)
         lengths = (200, 30, 30)
         dataset_manager = SupervisedDatasetManager(dataset, lengths=lengths, num_workers=WORKERS_COUNT)
-        model = DepthNet(max_depth=2., min_depth=1.0).cuda()
+        model = DepthNet(max_depth=2., min_depth=1.0).to(device)
         optimizer_manger = OptimizerManager()
         criterion = SupervisedCriterion(0.01)
         handler = TrainingProcessHandler(mlflow_tags={"name": "test"})
