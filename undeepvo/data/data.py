@@ -1,35 +1,35 @@
 import os
-from google_drive_downloader import GoogleDriveDownloader as gdd
+# from google_drive_downloader import GoogleDriveDownloader as gdd
 
 
-class Downloader(object):
-    def __init__(self, sequence_id='08', main_dir='dataset'):
-        self.sequence_id = sequence_id
-        self.main_dir = main_dir
-        self.sequence = Sequence(self.sequence_id, self.main_dir)
-        if not os.path.exists(self.main_dir):
-            os.mkdir(self.main_dir)
+# class Downloader(object):
+#     def __init__(self, sequence_id='08', main_dir='dataset'):
+#         self.sequence_id = sequence_id
+#         self.main_dir = main_dir
+#         self.sequence = Sequence(self.sequence_id, self.main_dir)
+#         if not os.path.exists(self.main_dir):
+#             os.mkdir(self.main_dir)
 
-    def download_sequence(self):
-        gdd.download_file_from_google_drive(file_id=self.sequence.calib.id, dest_path=self.sequence.calib.name,
-                                            unzip=True)
-        os.rename(os.path.join(os.curdir, self.main_dir, 'sequences', self.sequence_id, 'calib.txt'),
-                  os.path.join(os.curdir, self.main_dir, 'sequences', self.sequence_id, 'calib1.txt'))
-        gdd.download_file_from_google_drive(file_id=self.sequence.poses.id, dest_path=self.sequence.poses.name,
-                                            unzip=True)
-        gdd.download_file_from_google_drive(file_id=self.sequence.images.id, dest_path=self.sequence.images.name,
-                                            unzip=True)
-        if os.path.exists(os.path.join(os.curdir, self.main_dir, 'sequences', self.sequence_id, 'calib.txt')):
-            os.remove(os.path.join(os.curdir, self.main_dir, 'sequences', self.sequence_id, 'calib.txt'))
-            if os.path.exists(os.path.join(os.curdir, self.main_dir, 'sequences', self.sequence_id, 'calib1.txt')):
-                os.rename(os.path.join(os.curdir, self.main_dir, 'sequences', self.sequence_id, 'calib1.txt'),
-                          os.path.join(os.curdir, self.main_dir, 'sequences', self.sequence_id, 'calib.txt'))
-        self.clean_space()
+#     def download_sequence(self):
+#         gdd.download_file_from_google_drive(file_id=self.sequence.calib.id, dest_path=self.sequence.calib.name,
+#                                             unzip=True)
+#         os.rename(os.path.join(os.curdir, self.main_dir, 'sequences', self.sequence_id, 'calib.txt'),
+#                   os.path.join(os.curdir, self.main_dir, 'sequences', self.sequence_id, 'calib1.txt'))
+#         gdd.download_file_from_google_drive(file_id=self.sequence.poses.id, dest_path=self.sequence.poses.name,
+#                                             unzip=True)
+#         gdd.download_file_from_google_drive(file_id=self.sequence.images.id, dest_path=self.sequence.images.name,
+#                                             unzip=True)
+#         if os.path.exists(os.path.join(os.curdir, self.main_dir, 'sequences', self.sequence_id, 'calib.txt')):
+#             os.remove(os.path.join(os.curdir, self.main_dir, 'sequences', self.sequence_id, 'calib.txt'))
+#             if os.path.exists(os.path.join(os.curdir, self.main_dir, 'sequences', self.sequence_id, 'calib1.txt')):
+#                 os.rename(os.path.join(os.curdir, self.main_dir, 'sequences', self.sequence_id, 'calib1.txt'),
+#                           os.path.join(os.curdir, self.main_dir, 'sequences', self.sequence_id, 'calib.txt'))
+#         self.clean_space()
 
-    def clean_space(self):
-        os.remove(self.sequence.calib.name)
-        os.remove(self.sequence.poses.name)
-        os.remove(self.sequence.images.name)
+#     def clean_space(self):
+#         os.remove(self.sequence.calib.name)
+#         os.remove(self.sequence.poses.name)
+#         os.remove(self.sequence.images.name)
 
 
 class Sequence(object):
@@ -51,6 +51,6 @@ class Kitti_link(object):
         self.id = id
 
 
-if __name__ == '__main__':
-    s8 = Downloader('08')
-    s8.download_sequence()
+# if __name__ == '__main__':
+#     s8 = Downloader('08')
+#     s8.download_sequence()

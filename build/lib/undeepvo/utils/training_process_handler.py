@@ -2,7 +2,6 @@ import datetime
 import os.path
 
 import torch
-from torch.optim.lr_scheduler import StepLR
 from torch.utils.tensorboard import SummaryWriter
 from tqdm.auto import tqdm
 
@@ -90,13 +89,8 @@ class TrainingProcessHandler(object):
             self._iteration_progress_bar.reset()
         self._epoch_progress_bar.update()
         self._epoch_progress_bar.set_postfix_str(self.metric_string("valid", metrics))
-        # Step the learning rate scheduler after each epoch
-        if self._model is not None and hasattr(self._model, "optimizer") and hasattr(self._model.optimizer, "scheduler"):
-            self._model.optimizer.scheduler.step()  # Step the LR decay after every epoch
-        print(f"Updated Learning Rate: {self._model.optimizer.param_groups[0]['lr']}")
         if self.should_save_model(metrics) and self._model is not None:
-            torch.save(self._model.state_dict(), os.path.join(self._model_folder, f"{self._run_name}_checkpoint_{self._current_epoch}.pth"))
-            print(f"Model checkpoint saved after epoch: {self._current_epoch}")
+            torch.save(self._model.state_dict(), os.path.join(self._model_folder, f"{self._run_name}_checkpoint.pth"))
         self._current_epoch += 1
         self._global_epoch_step += 1
         if self._mlflow_handler is not None:

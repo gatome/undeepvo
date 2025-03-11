@@ -1,1 +1,2 @@
-from .data import Downloader, Sequence
+from .data import Sequence  # Downloader removed because data is pre-downloaded
+
