@@ -26,7 +26,6 @@ class Problem(abc.ABC):
                 train_metrics = self._train_step(batch)
                 self._training_process_handler.iteration_callback(metrics=train_metrics)
 
-            self._optimizer_manager.update()
             self._training_process_handler.epoch_callback(metrics=self.get_validation_metrics(),
                                                           **self.get_additional_data())
         self._training_process_handler.finish_callback(metrics=self.get_test_metrics())

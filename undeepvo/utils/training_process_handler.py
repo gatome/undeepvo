@@ -79,7 +79,7 @@ class TrainingProcessHandler(object):
             self.validation_history.setdefault(key, []).append(value)
         self._write_epoch_metrics(metrics)
         if image_batches is not None:
-            self._write_image_batches(image_batches)
+            sSelf._write_image_batches(image_batches)
         if figures is not None:
             self._write_figures(figures)
         if audios is not None:
@@ -91,9 +91,10 @@ class TrainingProcessHandler(object):
         self._epoch_progress_bar.update()
         self._epoch_progress_bar.set_postfix_str(self.metric_string("valid", metrics))
         # Step the learning rate scheduler after each epoch
-        if self._model is not None and hasattr(self._model, "optimizer") and hasattr(self._model.optimizer, "scheduler"):
-            self._model.optimizer.scheduler.step()  # Step the LR decay after every epoch
-        print(f"Updated Learning Rate: {self._model.optimizer.param_groups[0]['lr']}")
+        scheduler = self._optimizer_manager.get_scheduler()
+        if scheduler is not None:
+            scheduler.step()
+            print(f"Updated Learning Rate: {scheduler.get_last_lr()}")
         if self.should_save_model(metrics) and self._model is not None:
             torch.save(self._model.state_dict(), os.path.join(self._model_folder, f"{self._run_name}_checkpoint_{self._current_epoch}.pth"))
             print(f"Model checkpoint saved after epoch: {self._current_epoch}")
