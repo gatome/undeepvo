@@ -79,7 +79,7 @@ class TrainingProcessHandler(object):
             self.validation_history.setdefault(key, []).append(value)
         self._write_epoch_metrics(metrics)
         if image_batches is not None:
-            sSelf._write_image_batches(image_batches)
+            self._write_image_batches(image_batches)
         if figures is not None:
             self._write_figures(figures)
         if audios is not None:
