@@ -10,7 +10,7 @@ from .mflow_handler import MlFlowHandler
 
 
 class TrainingProcessHandler(object):
-    def __init__(self, data_folder="logs", model_folder="model", enable_iteration_progress_bar=False,
+    def __init__(self, data_folder="logs", model_folder="model", enable_iteration_progress_bar=True,
                  model_save_key="loss", mlflow_tags=None, mlflow_parameters=None, enable_mlflow=True,
                  mlflow_experiment_name="undeepvo"):
         if mlflow_tags is None:
@@ -90,11 +90,6 @@ class TrainingProcessHandler(object):
             self._iteration_progress_bar.reset()
         self._epoch_progress_bar.update()
         self._epoch_progress_bar.set_postfix_str(self.metric_string("valid", metrics))
-        # Step the learning rate scheduler after each epoch
-        scheduler = self._optimizer_manager.get_scheduler()
-        if scheduler is not None:
-            scheduler.step()
-            print(f"Updated Learning Rate: {scheduler.get_last_lr()}")
         if self.should_save_model(metrics) and self._model is not None:
             torch.save(self._model.state_dict(), os.path.join(self._model_folder, f"{self._run_name}_checkpoint_{self._current_epoch}.pth"))
             print(f"Model checkpoint saved after epoch: {self._current_epoch}")
